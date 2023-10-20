@@ -8,11 +8,19 @@ import {
   Keyboard 
 } from 'react-native'
 
-function TodoInsert(){
-  const [ todoText, setTodoText ] = useState('')
+function TodoInsert({ onInsertTodo, todoText, setTodoText }){
+
   const onPress = () => {
-    setTodoText('')
-    Keyboard.dismiss()
+    const trimedText = todoText.trim()
+    onInsertTodo(trimedText)
+  }
+
+  const handleChange = (text) => {
+    if(/\n/.test(text)){
+      onPress()
+    }else{
+      setTodoText(text)
+    }
   }
   
   return (
@@ -20,10 +28,15 @@ function TodoInsert(){
       <TextInput
         placeholder='할일을 작성해주세요'
         placeholderTextColor='#a8c8ff'
-        selectionColor={'d6e3ff'}
+        selectionColor={'#d6e3ff'}
         style={styles.input}
-        onChangeText={setTodoText}
-        onSubmitEditing={onPress}
+        value={todoText}
+        blurOnSubmit={false}
+        onChangeText={handleChange}
+        returnKeyType="done"
+        maxLength={50}
+        autoCorrect={false}
+        // onSubmitEditing={onPress}
         />
         <TouchableOpacity
           activeOpacity={0.7}
@@ -52,6 +65,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#a8c8ff',
     paddingVertical: 20,
+    flex: 1,
   },
   button: {
     backgroundColor: '#a8c8ff',

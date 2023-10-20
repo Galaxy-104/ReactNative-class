@@ -14,13 +14,38 @@ function HomeScreen({navigation}){
         {id: 2, title: '보고서 작성하기', category: '업무', createdAt: '2023-08-22', isDone: true},
         {id: 3, title: '자기전에 책읽기', category: '자기계발', createdAt: '2023-08-22', isDone: false},
     ])
-    
+    const [todoText, setTodoText] = useState('')
+    const onInsertTodo = (trimedText) => {
+        if(trimedText && trimedText.length > 2){
+            const nextId = todos.length + 1
+            const todoContents = trimedText.split(',')
+            const createdTime = new Date()
+
+            const newTodo = {
+                id: todos.length + 1,
+                title: todoContents[0],
+                category: todoContents[1] || '자기계발',
+                createdAt: `${createdTime.getFullYear()}-${createdTime.getMonth() + 1}-${createdTime.getDate()}`
+            }
+
+            if(todos.filter(todo => toto.title === newTodo.title).length > 0){
+                setTodoText('할일이 이미 존재합니다')
+            }else{
+                setTodos([...todos, newTodo])
+                keyboard.dismiss()
+                setTodoText('')
+            }
+        }else{
+            setTodoText('3자 이상 입력하세요')
+        }
+    }
+
     return (
         <SafeAreaView style={styles.block}>
             <StatusBar backgroundColor="#a8c8ffff"></StatusBar>
             <DateHeader date={date}/>
             {todos.length === 0? <Default/> : <TodoList todos={todos}/>}
-            <TodoInsert/>
+            <TodoInsert onInsertTodo={onInsertTodo} todoText={todoText} setTodoText={setTodoText}/>
         </SafeAreaView>
     )
 }
