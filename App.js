@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import HomeScreen from './screens/HomeScreen'
-import CalandarScreen from './screens/CalandarScreen'
+import CalendarScreen from './screens/CalendarScreen'
 import DashBoardScreen from './screens/DashBoardScreen'
 import SettingsScreen from './screens/SettingsScreen'
 
@@ -21,9 +21,9 @@ function App(){
           title: '홈',
           tabBarIcon: ({ color, size }) => <Icon name='home' color={color} size={size}/>
         }}/>
-        <Tab.Screen name='Calendar' component={CalandarScreen} options={{
+        <Tab.Screen name='Calendar' component={CalendarScreen} options={{
           title: '달력',
-          tabBarIcon: ({ color, size }) => <Icon name='calandar-today' color={color} size={size}/>          
+          tabBarIcon: ({ color, size }) => <Icon name='calendar-today' color={color} size={size}/>          
         }}/>
         <Tab.Screen name='DashBoard' component={DashBoardScreen} options={{
           title: '통계',

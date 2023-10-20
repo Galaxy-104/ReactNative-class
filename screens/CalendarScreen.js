@@ -1,7 +1,7 @@
 import React from 'react'
 import { SafeAreaView, View, Text, StyleSheet, StatusBar } from 'react-native'
 
-function CalandarScreen({navigation}){
+function CalendarScreen({navigation}){
     return (
         <SafeAreaView style={styles.block}>
             <StatusBar backgroundColor="#a8c8ffff"></StatusBar>
@@ -18,4 +18,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default CalandarScreen
+export default CalendarScreen
