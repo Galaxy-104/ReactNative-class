@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "755894211764",
+    "project_id": "learnnative-317ee",
+    "storage_bucket": "learnnative-317ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:755894211764:android:666e5885df0a966bd7b3e1",
+        "android_client_info": {
+          "package_name": "com.learnnative"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGiG1zLp1W1Q9frfjzj1t54t0nXf0gGUY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

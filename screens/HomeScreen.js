@@ -1,4 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
+import {
+    addData,
+    getCollection,
+    getCurrentTime
+} from '../apis/firebase'
+
 import { 
     SafeAreaView, 
     View, Text, 
@@ -19,16 +25,13 @@ function HomeScreen({ navigation, caretType, setCaretType }){
 
     const date = new Date()
     const categories = ['자기계발', '업무', '오락', '여행', '연애', 'IT', '취미']
-    const [todos, setTodos] = useState([
-        {id: 1, title: '공원에 산책가기', category: '여행', createdAt: '2023-08-22', isDone: false},
-        {id: 2, title: '보고서 작성하기', category: '업무', createdAt: '2023-08-22', isDone: true},
-        {id: 3, title: '자기전에 책읽기', category: '자기계발', createdAt: '2023-08-22', isDone: false},
-    ])
+    const [todos, setTodos] = useState([])
     const [todoText, setTodoText] = useState('')
     const [warning, setWarning] = useState(false)
+    const [loading, setLoading] = useState(true)
     const category = useRef('')
 
-    const onInsertTodo = (trimedText) => {
+    const onInsertTodo = async (trimedText) => {
         if(!category.current){
             setTodoText('카테고리를 먼저 선택해주세요')
             setWarning(true)
@@ -36,22 +39,23 @@ function HomeScreen({ navigation, caretType, setCaretType }){
         }
 
         if(trimedText && trimedText.length > 2){
-            const nextId = todos.length + 1
-            const todoContents = trimedText.split(',')
-            const createdTime = new Date()
+            // const nextId = todos.length + 1
+            // const todoContents = trimedText.split(',')
+            // const createdTime = new Date()
 
-            const newTodo = {
-                id: todos.length + 1,
-                title: todoContents[0],
-                category: category.current || '자기계발',
-                createdAt: `${createdTime.getFullYear()}-${createdTime.getMonth() + 1}-${createdTime.getDate()}`
-            }
-
-            if(todos.filter(todo => todo.title === newTodo.title).length > 0){
+            
+            if(todos.filter(todo => todo.title === trimedText).length > 0){
                 setTodoText('할일이 이미 존재합니다')
                 setWarning(true)
             }else{
-                setTodos([newTodo, ...todos])
+                const newTodo = {
+                    title: todoContents[0],
+                    category: category.current || '자기계발',
+                    isDone: false,
+                    createdAt: getCurrentTime(),
+                }
+
+                await addData('todos', newTodo)
                 Keyboard.dismiss()
                 setTodoText('')
                 category.current = ''
@@ -77,6 +81,45 @@ function HomeScreen({ navigation, caretType, setCaretType }){
 
     useEffect(() => navigation.addListener('focus', () => console.log('페이지 로딩')), [])
     useEffect(() => navigation.addListener('blur', () => console.log('페이지 벗어남')), [])
+
+    useEffect(() => {
+        function onResult(querySnapshot){
+            const list = []
+            querySnapshot.forEach(doc => {
+                list.push({
+                    ...doc.data(),
+                    id: doc.id,
+                })
+            })
+
+            setTodos(list)
+
+            if(loading){
+                setLoading(false)
+            }
+        }
+
+        function onError(error){
+            console.error(`${error} occured when reading todos`)
+        }
+
+        return getCollection('todos', 
+                                onResult, onError,
+                                null,
+                                {exists: true, condition: ['createdAt', 'asc']},
+                                null
+                                )
+        
+
+    }, [])
+
+    if(loading){
+        return (
+            <View>
+                <Text>로딩중...</Text>
+            </View>
+        )
+    }
 
     return (
         <SafeAreaView 

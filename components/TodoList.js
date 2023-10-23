@@ -8,9 +8,11 @@ function TodoList({ todos }){
     <FlatList
       data={todos}
       style={styles.container}
-      keyExtractor={item => item.id.toString()}
+      keyExtractor={item => item.id}
       ItemSeparatorComponent={() => <View style={styles.line}/>}
-      renderItem={TodoItem}
+      renderItem={({item}) => (
+        <TodoItem {...item}/>
+      )}
     />
   )
 }
