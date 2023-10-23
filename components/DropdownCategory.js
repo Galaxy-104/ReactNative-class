@@ -5,7 +5,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign'
 const caretdownComponent = (props) => <AntIcon name="caretdown" {...props} size={15}/>
 const caretupComponent = (props) => <AntIcon name="caretup" {...props} size={15}/>
 
-function DropdownCategory({ caretType, setCaretType }){
+function DropdownCategory({ caretType, setCaretType, currentCategory }){
   const onPress = () => {
     setCaretType(!caretType)
   }

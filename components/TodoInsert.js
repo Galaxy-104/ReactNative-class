@@ -8,7 +8,15 @@ import {
   Keyboard 
 } from 'react-native'
 
-function TodoInsert({ onInsertTodo, todoText, setTodoText, warning, setWarning }){
+function TodoInsert({ 
+  onInsertTodo, 
+  todoText, 
+  setTodoText, 
+  warning, 
+  setWarning,
+  placeholderText,
+  setPlaceholderText
+}){
 
   const onPress = () => {
     const trimedText = todoText.trim()
@@ -21,6 +29,7 @@ function TodoInsert({ onInsertTodo, todoText, setTodoText, warning, setWarning }
     }else{
       setTodoText(text)
       setWarning(false)
+      setPlaceholderText('할일을 작성해주세요')
     }
   }
 
@@ -31,8 +40,8 @@ function TodoInsert({ onInsertTodo, todoText, setTodoText, warning, setWarning }
   return (
     <View style={styles.container}>
       <TextInput
-        placeholder='할일을 작성해주세요'
-        placeholderTextColor='#a8c8ff'
+        placeholder={placeholderText}
+        placeholderTextColor={warning? "red" : '#a8c8ff'}
         selectionColor={'#d6e3ff'}
         style={[styles.input, { color: warning? 'red' : '#a8c8ff' }]}
         value={todoText}

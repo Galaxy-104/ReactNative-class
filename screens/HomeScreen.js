@@ -21,7 +21,7 @@ import TodoInsert from '../components/TodoInsert'
 import TodoList from '../components/TodoList'
 import DropdownItem from '../components/DropdownItem'
 
-function HomeScreen({ navigation, caretType, setCaretType }){
+function HomeScreen({ navigation, caretType, setCaretType, setCurrentCategory }){
 
     const date = new Date()
     const categories = ['자기계발', '업무', '오락', '여행', '연애', 'IT', '취미']
@@ -30,10 +30,12 @@ function HomeScreen({ navigation, caretType, setCaretType }){
     const [warning, setWarning] = useState(false)
     const [loading, setLoading] = useState(true)
     const category = useRef('')
+    const [placeholderText, setPlaceholderText] = useState('할일을 작성해주세요')
 
     const onInsertTodo = async (trimedText) => {
         if(!category.current){
-            setTodoText('카테고리를 먼저 선택해주세요')
+            setTodoText('')
+            setPlaceholderText('카테고리를 먼저 선택해주세요')
             setWarning(true)
             return
         }
@@ -45,11 +47,12 @@ function HomeScreen({ navigation, caretType, setCaretType }){
 
             
             if(todos.filter(todo => todo.title === trimedText).length > 0){
-                setTodoText('할일이 이미 존재합니다')
+                setTodoText('')
+                setPlaceholderText('할일이 이미 존재합니다')
                 setWarning(true)
             }else{
                 const newTodo = {
-                    title: todoContents[0],
+                    title: trimedText,
                     category: category.current || '자기계발',
                     isDone: false,
                     createdAt: getCurrentTime(),
@@ -61,7 +64,8 @@ function HomeScreen({ navigation, caretType, setCaretType }){
                 category.current = ''
             }
         }else{
-            setTodoText('3자 이상 입력하세요')
+            setTodoText('')
+            setPlaceholderText('3자 이상 입력하세요')
             setWarning(true)
         }
     }
@@ -108,7 +112,7 @@ function HomeScreen({ navigation, caretType, setCaretType }){
                                 null,
                                 {exists: true, condition: ['createdAt', 'asc']},
                                 null
-                                )
+                            )
         
 
     }, [])
@@ -154,6 +158,8 @@ function HomeScreen({ navigation, caretType, setCaretType }){
                 setTodoText={setTodoText}
                 warning={warning}
                 setWarning={setWarning}
+                placeholderText={placeholderText}
+                setPlaceholderText={setPlaceholderText}
             />
         </SafeAreaView>
     )
