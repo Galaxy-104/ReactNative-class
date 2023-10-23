@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SafeAreaView, View, Text, StyleSheet, StatusBar } from 'react-native'
+import { SafeAreaView, View, Text, StyleSheet, StatusBar, Keyboard } from 'react-native'
 
 import Default from '../components/Default'
 import DateHeader from '../components/DateHeader'
@@ -15,6 +15,8 @@ function HomeScreen({navigation}){
         {id: 3, title: '자기전에 책읽기', category: '자기계발', createdAt: '2023-08-22', isDone: false},
     ])
     const [todoText, setTodoText] = useState('')
+    const [warning, setWarning] = useState(false)
+
     const onInsertTodo = (trimedText) => {
         if(trimedText && trimedText.length > 2){
             const nextId = todos.length + 1
@@ -28,15 +30,17 @@ function HomeScreen({navigation}){
                 createdAt: `${createdTime.getFullYear()}-${createdTime.getMonth() + 1}-${createdTime.getDate()}`
             }
 
-            if(todos.filter(todo => toto.title === newTodo.title).length > 0){
+            if(todos.filter(todo => todo.title === newTodo.title).length > 0){
                 setTodoText('할일이 이미 존재합니다')
+                setWarning(true)
             }else{
                 setTodos([...todos, newTodo])
-                keyboard.dismiss()
+                Keyboard.dismiss()
                 setTodoText('')
             }
         }else{
             setTodoText('3자 이상 입력하세요')
+            setWarning(true)
         }
     }
 
@@ -45,7 +49,13 @@ function HomeScreen({navigation}){
             <StatusBar backgroundColor="#a8c8ffff"></StatusBar>
             <DateHeader date={date}/>
             {todos.length === 0? <Default/> : <TodoList todos={todos}/>}
-            <TodoInsert onInsertTodo={onInsertTodo} todoText={todoText} setTodoText={setTodoText}/>
+            <TodoInsert 
+                onInsertTodo={onInsertTodo} 
+                todoText={todoText} 
+                setTodoText={setTodoText}
+                warning={warning}
+                setWarning={setWarning}
+            />
         </SafeAreaView>
     )
 }
