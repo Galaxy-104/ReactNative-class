@@ -21,7 +21,7 @@ import TodoInsert from '../components/TodoInsert'
 import TodoList from '../components/TodoList'
 import DropdownItem from '../components/DropdownItem'
 
-function HomeScreen({ navigation, caretType, setCaretType, setCurrentCategory }){
+function HomeScreen({ navigation, caretType, setCaretType, setPickCategory }){
 
     const date = new Date()
     const categories = ['자기계발', '업무', '오락', '여행', '연애', 'IT', '취미']
@@ -62,6 +62,7 @@ function HomeScreen({ navigation, caretType, setCaretType, setCurrentCategory })
                 Keyboard.dismiss()
                 setTodoText('')
                 category.current = ''
+                setPickCategory('')
             }
         }else{
             setTodoText('')
@@ -81,6 +82,7 @@ function HomeScreen({ navigation, caretType, setCaretType, setCurrentCategory })
     const selectCategory = (item, e) => {
         closeDropdown()
         category.current = item
+        setPickCategory(item)
     }
 
     useEffect(() => navigation.addListener('focus', () => console.log('페이지 로딩')), [])

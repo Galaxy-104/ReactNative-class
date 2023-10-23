@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -18,16 +18,16 @@ const Tab = createBottomTabNavigator()
 function App(){
 
   const [caretType, setCaretType] = useState(false)
-  const [ currnetCategory, setCurrentCategory ] = useState('')
+  const [pickCategory, setPickCategory] = useState('')
 
   return (
     <NavigationContainer>
       {/* 내비게이션 설정 */}
       <Tab.Navigator initialRouteName='Home'>
-        <Tab.Screen name='Home' children={(props) => <HomeScreen {...props} caretType={caretType} setCaretType={setCaretType} setCurrentCategory={setCurrentCategory}/> } options={{
+        <Tab.Screen name='Home' children={(props) => <HomeScreen {...props} caretType={caretType} setCaretType={setCaretType} setPickCategory={setPickCategory}/> } options={{
           title: '홈',
           tabBarIcon: ({ color, size }) => <Icon name='home' color={color} size={size}/>,
-          headerTitle: (props) => <DropdownCategory {...props} caretType={caretType} setCaretType={setCaretType} currnetCategory={currnetCategory}/>,
+          headerTitle: (props) => <DropdownCategory {...props} caretType={caretType} setCaretType={setCaretType} pickCategory={pickCategory}/>,
           headerStyle: {
             backgroundColor: '#a8c8ff',
           },
