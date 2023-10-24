@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -12,19 +12,59 @@ import SettingsScreen from './screens/SettingsScreen'
 
 import DropdownCategory from './components/DropdownCategory'
 
+import { getCollection } from './apis/firebase'
+
 // const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
 
 function App(){
 
+  const [todos, setTodos] = useState([])
+  const [loading, setLoading] = useState(true)
   const [caretType, setCaretType] = useState(false)
   const [pickCategory, setPickCategory] = useState('')
+
+
+  useEffect(() => {
+    function onResult(querySnapshot){
+        const list = []
+        querySnapshot.forEach(doc => {
+            list.push({
+                ...doc.data(),
+                id: doc.id,
+            })
+        })
+
+        setTodos(list)
+        setLoading(false)
+    }
+
+    function onError(error){
+        console.error(`${error} occured when reading todos`)
+    }
+
+    return getCollection('todos', 
+                            onResult, onError,
+                            null,
+                            {exists: true, condition: ['createdAt', 'asc']},
+                            null
+                        )
+    
+
+}, [])
 
   return (
     <NavigationContainer>
       {/* 내비게이션 설정 */}
       <Tab.Navigator initialRouteName='Home'>
-        <Tab.Screen name='Home' children={(props) => <HomeScreen {...props} caretType={caretType} setCaretType={setCaretType} setPickCategory={setPickCategory}/> } options={{
+        <Tab.Screen name='Home' children={(props) => <HomeScreen 
+          {...props} 
+          caretType={caretType} 
+          setCaretType={setCaretType} 
+          setPickCategory={setPickCategory}
+          todos={todos}
+          loading={loading}
+        /> } options={{
           title: '홈',
           tabBarIcon: ({ color, size }) => <Icon name='home' color={color} size={size}/>,
           headerTitle: (props) => <DropdownCategory {...props} caretType={caretType} setCaretType={setCaretType} pickCategory={pickCategory}/>,

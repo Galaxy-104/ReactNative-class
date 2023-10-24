@@ -21,14 +21,13 @@ import TodoInsert from '../components/TodoInsert'
 import TodoList from '../components/TodoList'
 import DropdownItem from '../components/DropdownItem'
 
-function HomeScreen({ navigation, caretType, setCaretType, setPickCategory }){
+function HomeScreen({ navigation, caretType, setCaretType, setPickCategory, loading, todos }){
 
     const date = new Date()
     const categories = ['자기계발', '업무', '오락', '여행', '연애', 'IT', '취미']
-    const [todos, setTodos] = useState([])
+   
     const [todoText, setTodoText] = useState('')
     const [warning, setWarning] = useState(false)
-    const [loading, setLoading] = useState(true)
     const category = useRef('')
     const [placeholderText, setPlaceholderText] = useState('할일을 작성해주세요')
 
@@ -87,37 +86,6 @@ function HomeScreen({ navigation, caretType, setCaretType, setPickCategory }){
 
     useEffect(() => navigation.addListener('focus', () => console.log('페이지 로딩')), [])
     useEffect(() => navigation.addListener('blur', () => console.log('페이지 벗어남')), [])
-
-    useEffect(() => {
-        function onResult(querySnapshot){
-            const list = []
-            querySnapshot.forEach(doc => {
-                list.push({
-                    ...doc.data(),
-                    id: doc.id,
-                })
-            })
-
-            setTodos(list)
-
-            if(loading){
-                setLoading(false)
-            }
-        }
-
-        function onError(error){
-            console.error(`${error} occured when reading todos`)
-        }
-
-        return getCollection('todos', 
-                                onResult, onError,
-                                null,
-                                {exists: true, condition: ['createdAt', 'asc']},
-                                null
-                            )
-        
-
-    }, [])
 
     if(loading){
         return (

@@ -13,8 +13,9 @@ export const getCollection = (collections, onResult, onError, query, order, limi
   let ref = getRef(collections)
 
   if(query && query.exists && query.condition && query.condition.length !== 0){
-    console.log(query.condition)
-    ref = ref.where(...query.condition)
+    for(let cond of query.condition){
+      ref = ref.where(...cond)
+    }
   }
   if(order && order.exists && order.condition && order.condition.length !== 0){
     ref = ref.orderBy(...order.condition)
@@ -28,4 +29,8 @@ export const getCollection = (collections, onResult, onError, query, order, limi
 
 export const getCurrentTime = () => {
   return firestore.FieldValue.serverTimestamp()
+}
+
+export const changeTimeFormat = (date) => {
+  return firestore.Timestamp.fromDate(date)
 }
