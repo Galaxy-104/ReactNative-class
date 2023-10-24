@@ -138,9 +138,9 @@ function HomeScreen({ navigation, caretType, setCaretType, setPickCategory, load
                 setTodoText={setTodoText}
                 warning={warning}
                 setWarning={setWarning}
-                disabled={today.getTime() !== getToday(new Date()).getTime()}
                 placeholderText={placeholderText}
-                setPlaceholderText={setPlaceholderText}
+                setPlaceholderText={setPlaceholderText} 
+                disabled={today.getTime() !== getToday(new Date()).getTime()}
             />
         </SafeAreaView>
     )

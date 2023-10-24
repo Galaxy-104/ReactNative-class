@@ -12,7 +12,7 @@ function TodoItem({ id, title, category, isDone, createdAt }){
         <View>
           <Text>{category}({isDone? "종료" : "진행중"})</Text>
           <Text style={styles.dateText}>
-            {createdAt && moment(createdAt.toDate()).format('hh:mm:ss')}
+            {createdAt && moment(createdAt.toDate()).format('YY-MM-DD')}
           </Text>
         </View>
       </View>

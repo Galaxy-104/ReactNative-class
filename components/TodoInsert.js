@@ -15,7 +15,8 @@ function TodoInsert({
   warning, 
   setWarning,
   placeholderText,
-  setPlaceholderText
+  setPlaceholderText,
+  disabled
 }){
 
   const onPress = () => {
@@ -40,8 +41,8 @@ function TodoInsert({
   return (
     <View style={styles.container}>
       <TextInput
-        placeholder={placeholderText}
-        placeholderTextColor={warning? "red" : '#a8c8ff'}
+        placeholder={disabled? "할일을 작성할 수 없습니다" : placeholderText}
+        placeholderTextColor={warning? "red" :  disabled? "#ddd" : '#a8c8ff'}
         selectionColor={'#d6e3ff'}
         style={[styles.input, { color: warning? 'red' : '#a8c8ff' }]}
         value={todoText}
@@ -53,10 +54,11 @@ function TodoInsert({
         onSubmitEditing={hideKeyboard}
         />
         <TouchableOpacity
+          disabled={disabled}
           activeOpacity={0.7}
           onPress={onPress}
         >
-          <View style={styles.button}>
+          <View style={[styles.button, { backgroundColor: disabled? "#ddd" : "#a8c8ff"}]}>
             <Text style={styles.buttonText}>추가</Text>
           </View>
         </TouchableOpacity>
@@ -82,7 +84,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   button: {
-    backgroundColor: '#a8c8ff',
     width: 80,
     height: 35,
     borderRadius: 20,
