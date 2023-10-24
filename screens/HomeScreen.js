@@ -1,9 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react'
 import {
     addData,
-    getCollection,
     getCurrentTime
 } from '../apis/firebase'
+
+import {
+    getToday,
+    getTomorrow
+} from '../utils/time'
 
 import { 
     SafeAreaView, 
@@ -21,15 +25,21 @@ import TodoInsert from '../components/TodoInsert'
 import TodoList from '../components/TodoList'
 import DropdownItem from '../components/DropdownItem'
 
-function HomeScreen({ navigation, caretType, setCaretType, setPickCategory, loading, todos }){
+function HomeScreen({ navigation, caretType, setCaretType, setPickCategory, loading, todos, route }){
 
-    const date = new Date()
-    const categories = ['자기계발', '업무', '오락', '여행', '연애', 'IT', '취미']
    
+    const categories = ['자기계발', '업무', '오락', '여행', '연애', 'IT', '취미']
     const [todoText, setTodoText] = useState('')
     const [warning, setWarning] = useState(false)
     const category = useRef('')
     const [placeholderText, setPlaceholderText] = useState('할일을 작성해주세요')
+
+    const date = (route.params && route.params.date)? new Date(route.params.date) : new Date()
+    const today = getToday(date)
+    const tomorrow = getTomorrow(getToday(date))
+    const todosToday = todos.filter(todo => todo.createdAt?.toDate() >= today && todo.createdAt?.toDate() < tomorrow)
+    const todosTodayLatest = [...todosToday]
+    todosTodayLatest.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
 
     const onInsertTodo = async (trimedText) => {
         if(!category.current){
@@ -121,13 +131,14 @@ function HomeScreen({ navigation, caretType, setCaretType, setPickCategory, load
             )}
 
             <DateHeader date={date}/>
-            {todos.length === 0? <Default/> : <TodoList todos={todos}/>}
+            {todosTodayLatest.length === 0? <Default/> : <TodoList todos={todos}/>}
             <TodoInsert 
                 onInsertTodo={onInsertTodo} 
                 todoText={todoText} 
                 setTodoText={setTodoText}
                 warning={warning}
                 setWarning={setWarning}
+                disabled={today.getTime() !== getToday(new Date()).getTime()}
                 placeholderText={placeholderText}
                 setPlaceholderText={setPlaceholderText}
             />
