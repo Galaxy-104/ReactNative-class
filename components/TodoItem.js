@@ -13,7 +13,7 @@ import { updateData } from '../apis/firebase'
 
 let lastTap = null
 
-function TodoItem({ id, title, category, isDone, createdAt }){
+function TodoItem({ id, title, category, isDone, createdAt, removeTodo }){
 
   const [doubleTabbed, setDoubleTabbed] = useState(false)
   const [text, SetText] = useState("")
@@ -50,7 +50,7 @@ function TodoItem({ id, title, category, isDone, createdAt }){
     e.stopPropagation()
     setDoubleTabbed(!doubleTabbed)
     Keyboard.dismiss()
-    updateDate('todos', id, {
+    updateData('todos', id, {
       title: text.trim()
     })
   }
@@ -61,6 +61,11 @@ function TodoItem({ id, title, category, isDone, createdAt }){
     Keyboard.dismiss()
   }
 
+  const handleRomove = (e) => {
+    e.stopPropagation()
+    removeTodo(id, title)
+  }
+
   useEffect(() => {
     if(inputRef.current){
       inputRef.current.focus()
@@ -68,7 +73,7 @@ function TodoItem({ id, title, category, isDone, createdAt }){
   })
 
   return (
-    <TouchableWithoutFeedback onPress={handlePress}>
+    <TouchableWithoutFeedback onPress={handlePress} onLongPress={handleRomove}>
       <View style={styles.item}>
         <View style={styles.titleMargin} onTouchStart={(e) => {e.stopPropagation()}}>
           {doubleTabbed?
