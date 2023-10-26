@@ -1,4 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
+import Swiper from 'react-native-web-swiper'
+import { SwipeListView } from 'react-native-swipe-list-view'
+
 import {
     addData,
     removeData,
@@ -178,6 +181,23 @@ function HomeScreen({ navigation, caretType, setCaretType, setPickCategory, load
             )}
 
             <DateHeader date={date}/>
+            <SwipeListView
+                renderItem={ (data) => (
+                    <View style={{color: 'black', backgroundColor: 'skyblue'}}>
+                        <Text>슬라이드1</Text>
+                    </View>
+                )
+                    
+                }
+                renderHiddenItem={ (data) => (
+                    <View style={{color: 'red'}}>
+                        <Text style={{color: 'red'}}>슬라이드2</Text>
+                    </View>  
+                )}
+                leftOpenValue={100}
+            />
+                
+                
             {todosTodayLatest.length === 0? <Default/> : <TodoList todos={todos} removeTodo={removeTodo}/>}
             <TodoInsert 
                 onInsertTodo={onInsertTodo} 
